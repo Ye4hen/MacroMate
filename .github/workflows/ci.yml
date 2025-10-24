@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-and-lint:
-    name: Test & Lint (PHP: ${{ matrix.php }}, Node: ${{ matrix.node }})
+    name: "Test & Lint (PHP: ${{ matrix.php }}, Node: ${{ matrix.node }})"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
