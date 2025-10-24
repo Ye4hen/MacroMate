@@ -1,0 +1,19 @@
+@theme {
+    --color-mm-dark: #18181a;
+    --color-mm-orange: #F97316;
+    --color-mm-dark-blue: oklch(37.3% 0.034 259.733);
+    --color-mm-orange-hover: #FB923C;
+    --color-mm-light-gray: #D1D5DB;
+    --color-mm-card: #2D2D30;
+    --color-mm-gray: #4B5563;
+    --color-mm-border: #4B5563;
+    --color-mm-error: #EF4444;
+    --color-mm-success: #10B981;
+    --color-mm-info: #3B82F6;
+    --color-mm-red: #DC2626;
+    --color-mm-dark-red: #B91C1C;
+    --color-mm-accent: var(--color-mm-dark-blue);
+    --color-mm-accent-fallback: #1f2937;
+    --color-mm-accent-hover: #223058;
+    --color-mm-secondary-hover: color-mix(in srgb, var(--color-mm-light-gray) 15%, white);
+}

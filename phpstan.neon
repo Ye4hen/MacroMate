@@ -1,0 +1,25 @@
+# phpstan.neon
+includes:
+  - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+  level: 5
+  reportUnmatchedIgnoredErrors: false
+
+  # Paths to analyze
+  paths:
+    - app
+    - routes
+    - database
+    - tests
+
+  bootstrapFiles:
+    - %currentWorkingDirectory%/vendor/autoload.php
+    - %currentWorkingDirectory%/bootstrap/app.php
+
+  excludePaths:
+    - vendor
+    - storage
+    - bootstrap/cache
+
+  tmpDir: ./phpstan-cache

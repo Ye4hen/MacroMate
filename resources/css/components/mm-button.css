@@ -1,0 +1,76 @@
+.mm-btn--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* primary */
+.mm-btn--primary {
+    background: var(--color-mm-orange);
+    color: white;
+    border: 1px solid transparent;
+    box-shadow: none;
+}
+
+.mm-btn--primary:hover {
+    background: var(--color-mm-orange-hover);
+}
+
+.mm-btn--primary:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.mm-btn--secondary {
+    background: white;
+    color: var(--color-mm-red);
+    border: 1px solid var(--color-mm-border);
+}
+
+.mm-btn--secondary:hover {
+    background: var(--color-mm-light-gray);
+    color: var(--color-mm-dark);
+}
+
+.mm-btn--secondary:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+}
+
+.mm-btn--accent {
+    background: var(--color-mm-accent);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* fallback for browsers that can't render oklch: prefer the hex fallback */
+@supports (background: color(display-p3 1 1 1)) {
+    /* nothing, modern browsers will use oklch already */
+}
+
+.mm-btn--accent:hover {
+    background: var(--color-mm-accent-hover);
+}
+
+.mm-btn--accent:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.mm-btn--danger {
+    background: var(--color-mm-red);
+    color: white;
+    border: 1px solid var(--color-mm-dark-red);
+}
+
+.mm-btn--danger:hover {
+    background: var(--color-mm-dark-red);
+}
+
+.mm-btn--danger:focus {
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+}
+
+.mm-btn--primary, .mm-btn--secondary, .mm-btn--accent, .mm-btn--danger {
+    transition: background-color .12s ease, color .12s ease, box-shadow .12s ease, transform .06s ease;
+}
+
+.mm-btn--primary:active, .mm-btn--secondary:active, .mm-btn--accent:active, .mm-btn--danger:active {
+    transform: translateY(1px);
+}
