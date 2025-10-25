@@ -94,13 +94,17 @@ jobs:
       - name: Debug larastan & phpstan
         run: |
           echo "PWD=$(pwd)"
-          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'ok1\n' : 'no1\n'; echo file_exists('vendor/larastan/extension.neon') ? 'ok2\n' : 'no2\n';"
-          ls -la vendor/larastan || true
-          ls -la vendor/bin || true
-          ./vendor/bin/phpstan --version || true
+          echo "Vendor larastan paths:"
+          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'vendor/larastan/larastan/extension.neon exists\n' : 'vendor/larastan/larastan/extension.neon missing\n';"
+          php -r "echo file_exists('vendor/larastan/extension.neon') ? 'vendor/larastan/extension.neon exists\n' : 'vendor/larastan/extension.neon missing\n';"
+          echo "vendor/bin contents:"; ls -la vendor/bin || true
+          echo "Which phpstan binary:"; which phpstan || true
+          echo "Vendor phpstan version:"; ./vendor/bin/phpstan --version || true
+          echo "Running vendor phpstan with debug (shows loaded neon includes):"
+          ./vendor/bin/phpstan analyse --memory-limit=2G --debug || true
 
       - name: Run PHPStan
-        run: composer exec -- phpstan analyse --memory-limit=2G
+        run: composer run analyse
 
   php-cs-fixer:
     name: PHP-CS-Fixer (lint)
