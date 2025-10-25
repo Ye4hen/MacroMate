@@ -10,21 +10,26 @@ class MMSelectTest extends TestCase
     {
         $options = ['yes' => 'Yes', 'no' => 'No'];
 
-        $rendered = $this->blade(
-            '<x-mm-select name="agree" label="Agree" :options="$options" required />',
-            ['options' => $options]
-        );
+        $rendered = $this->view('components.mm-select', [
+            'options' => $options,
+            'name' => 'agree',
+            'label' => 'Agree',
+            'required' => true,
+        ]);
 
         $rendered->assertSee('required', false);
     }
 
     public function test_renders_error_message(): void
     {
+        $options = ['yes' => 'Yes', 'no' => 'No'];
         $this->withViewErrors(['agree' => 'You must accept.']);
 
-        $rendered = $this->blade(
-            '<x-mm-select name="agree" label="Agree" :options="[\'yes\' => \'Yes\']" />'
-        );
+        $rendered = $this->view('components.mm-select', [
+            'options' => $options,
+            'name' => 'agree',
+            'label' => 'Agree',
+        ]);
 
         $rendered->assertSee('You must accept.');
     }
@@ -37,7 +42,6 @@ class MMSelectTest extends TestCase
             '<x-mm-select name="letter" label="Letter">' . $slotHtml . '</x-mm-select>'
         );
 
-        // slot content should appear
         $rendered->assertSee('value="a"', false);
         $rendered->assertSee('value="b"', false);
         $rendered->assertSee('A');

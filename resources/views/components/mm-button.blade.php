@@ -1,4 +1,10 @@
 @php
+    $variant = $variant ?? "primary";
+    $type = $type ?? "submit";
+    $href = $href ?? null;
+    $label = $label ?? null;
+    $attributes = $attributes ?? new \Illuminate\View\ComponentAttributeBag();
+
     $base_classes = "inline-flex items-center justify-center cursor-pointer px-4 py-2 rounded transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1";
     $variant_class = match ($variant) {
         "secondary" => "mm-btn--secondary",
@@ -14,10 +20,6 @@
 
     $classes = trim("{$base_classes} {$variant_class} {$disabled_class} {$user_class}");
 @endphp
-
-@pushonce("styles")
-    @vite("resources/css/components/mm-button.css")
-@endpushonce
 
 @if ($href)
     <a

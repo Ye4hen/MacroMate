@@ -17,6 +17,9 @@ parameters:
     - %currentWorkingDirectory%/vendor/autoload.php
     - %currentWorkingDirectory%/bootstrap/app.php
 
+  ignoreErrors:
+    - message: '#Call to an undefined static method .*JWTAuth::.*#'
+
   excludePaths:
     - vendor
     - storage

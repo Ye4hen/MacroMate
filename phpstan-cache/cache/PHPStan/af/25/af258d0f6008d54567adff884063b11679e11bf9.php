@@ -205,7 +205,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     'C:\\Users\\Yevhen\\Desktop\\programming_lessons\\PHP\\Laravel\\calories_tracker\\tests\\Feature\\UI\\MMInputTest.php' => 
     array (
-      0 => '16ca8ceaacca81e016c9487f6b6adec37255a3f8',
+      0 => 'de85937d9e4b5c14863fbb4af035ad34da212f62',
       1 => 
       array (
         0 => 'tests\\feature\\ui\\mminputtest',
@@ -222,7 +222,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     'C:\\Users\\Yevhen\\Desktop\\programming_lessons\\PHP\\Laravel\\calories_tracker\\tests\\Feature\\UI\\MMSelectTest.php' => 
     array (
-      0 => '76a30673445db98ab8f39a00d3f5e5906d41538b',
+      0 => '5c8b9c80bb349db2d24f505ff5f196c732f5c758',
       1 => 
       array (
         0 => 'tests\\feature\\ui\\mmselecttest',
