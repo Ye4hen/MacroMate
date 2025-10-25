@@ -91,20 +91,21 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Debug larastan & phpstan
+      - name: Ensure phpstan cache cleared
         run: |
-          echo "PWD=$(pwd)"
-          echo "Vendor larastan paths:"
-          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'vendor/larastan/larastan/extension.neon exists\n' : 'vendor/larastan/larastan/extension.neon missing\n';"
-          php -r "echo file_exists('vendor/larastan/extension.neon') ? 'vendor/larastan/extension.neon exists\n' : 'vendor/larastan/extension.neon missing\n';"
-          echo "vendor/bin contents:"; ls -la vendor/bin || true
-          echo "Which phpstan binary:"; which phpstan || true
-          echo "Vendor phpstan version:"; ./vendor/bin/phpstan --version || true
-          echo "Running vendor phpstan with debug (shows loaded neon includes):"
+          ./vendor/bin/phpstan clear-result-cache || true
+          rm -rf phpstan-cache || true
+
+      - name: Debug larastan & phpstan (once)
+        run: |
+          echo "Checking larastan and phpstan..."
+          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'larastan ext ok\n' : 'no larastan ext\n';"
+          ls -la vendor/larastan || true
+          ./vendor/bin/phpstan --version
           ./vendor/bin/phpstan analyse --memory-limit=2G --debug || true
 
       - name: Run PHPStan
-        run: composer run analyse
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
   php-cs-fixer:
     name: PHP-CS-Fixer (lint)
