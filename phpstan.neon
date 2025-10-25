@@ -23,3 +23,6 @@ parameters:
     - bootstrap/cache
 
   tmpDir: ./phpstan-cache
+
+  stubFiles:
+    - %currentWorkingDirectory%/phpstan-stubs/jwt.php
