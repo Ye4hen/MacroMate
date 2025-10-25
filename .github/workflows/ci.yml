@@ -91,6 +91,14 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      - name: Debug larastan & phpstan
+        run: |
+          echo "PWD=$(pwd)"
+          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'ok1\n' : 'no1\n'; echo file_exists('vendor/larastan/extension.neon') ? 'ok2\n' : 'no2\n';"
+          ls -la vendor/larastan || true
+          ls -la vendor/bin || true
+          ./vendor/bin/phpstan --version || true
+
       - name: Run PHPStan
         run: composer exec -- phpstan analyse --memory-limit=2G
 
