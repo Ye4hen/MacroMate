@@ -1,4 +1,11 @@
 @php
+    $name = $name ?? "";
+    $label = $label ?? "";
+    $options = $options ?? [];
+    $value = $value ?? null;
+    $required = $required ?? false;
+    $attributes = $attributes ?? new \Illuminate\View\ComponentAttributeBag();
+
     $selected = $value ? $value : old($name);
     $errors = $errors ?? (session()->get("errors") ?? new \Illuminate\Support\ViewErrorBag());
 @endphp
@@ -18,7 +25,7 @@
         {{
             $attributes->merge([
                 "class" => 'w-full border px-3 py-2 rounded border-mm-border bg-mm-dark-blue text-white
-                                                                                        focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
+                                                                                                    focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
             ])
         }}
     >

@@ -2,6 +2,7 @@
 @import "flowbite/src/themes/default";
 @import "./base.css";
 @import "./colors.css";
+@import "./components/index.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @plugin "flowbite/plugin";

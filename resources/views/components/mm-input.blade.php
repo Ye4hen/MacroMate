@@ -1,4 +1,15 @@
 @php
+    $name = $name ?? "";
+    $id = $id ?? $name;
+    $error_name = $error_name ?? null;
+    $placeholder = $placeholder ?? null;
+    $label = $label ?? "";
+    $type = $type ?? "text";
+    $value = $value ?? old($name);
+    $required = $required ?? false;
+    $autofocus = $autofocus ?? false;
+    $label_tooltip = $label_tooltip ?? null;
+    $attributes = $attributes ?? new \Illuminate\View\ComponentAttributeBag();
     $errors = $errors ?? (session()->get("errors") ?? new \Illuminate\Support\ViewErrorBag());
     $popover_id = "label_popover_" . \Illuminate\Support\Str::random(8);
 
