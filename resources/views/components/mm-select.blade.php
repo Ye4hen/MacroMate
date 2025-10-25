@@ -24,12 +24,11 @@
         @if ($required) required @endif
         {{
             $attributes->merge([
-                "class" => 'w-full border px-3 py-2 rounded border-mm-border bg-mm-dark-blue text-white
-                                                                                                    focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
+                "class" => 'w-full border px-3 py-2 rounded border-mm-border bg-mm-dark-blue text-white focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
             ])
         }}
     >
-        @if (! trim($slot->toHtml()))
+        @if (!isset($slot) || !trim($slot->toHtml()))
             @foreach ($options as $key => $text)
                 <option
                     value="{{ $key }}"
