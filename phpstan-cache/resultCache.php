@@ -5305,14 +5305,14 @@ return [
   ),
   'C:\\Users\\Yevhen\\Desktop\\programming_lessons\\PHP\\Laravel\\calories_tracker\\tests\\Feature\\UI\\MMInputTest.php' => 
   array (
-    'fileHash' => '16ca8ceaacca81e016c9487f6b6adec37255a3f8',
+    'fileHash' => 'de85937d9e4b5c14863fbb4af035ad34da212f62',
     'dependentFiles' => 
     array (
     ),
   ),
   'C:\\Users\\Yevhen\\Desktop\\programming_lessons\\PHP\\Laravel\\calories_tracker\\tests\\Feature\\UI\\MMSelectTest.php' => 
   array (
-    'fileHash' => '76a30673445db98ab8f39a00d3f5e5906d41538b',
+    'fileHash' => '5c8b9c80bb349db2d24f505ff5f196c732f5c758',
     'dependentFiles' => 
     array (
     ),

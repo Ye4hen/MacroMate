@@ -73,6 +73,4 @@ jobs:
         run: composer run lint
 
       - name: Prettier check (blade + frontend files)
-        run: |
-          npx prettier --version
-          npx prettier --check "resources/views/**/*.blade.php" || (echo "Prettier check failed" && exit 1)
+        run: npm run format

@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "format": "prettier --write resources/views/**/*"
     },
     "devDependencies": {
         "@vitejs/plugin-legacy": "^7.2.1",

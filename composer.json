@@ -68,7 +68,7 @@
         "test": "phpunit --colors=always",
         "lint": "php-cs-fixer fix --dry-run --stop-on-violation",
         "lint--fix": "php-cs-fixer fix",
-        "analyse": "phpstan analyse --memory-limit=2G",
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=2G",
         "coverage": "phpunit --coverage-clover=storage/coverage/clover.xml"
     },
     "extra": {
