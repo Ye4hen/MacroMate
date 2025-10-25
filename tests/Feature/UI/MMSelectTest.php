@@ -37,7 +37,6 @@ class MMSelectTest extends TestCase
             '<x-mm-select name="letter" label="Letter">' . $slotHtml . '</x-mm-select>'
         );
 
-        // slot content should appear
         $rendered->assertSee('value="a"', false);
         $rendered->assertSee('value="b"', false);
         $rendered->assertSee('A');

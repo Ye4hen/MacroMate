@@ -1,21 +1,21 @@
 @props([
-    'id',
-    'series',
-    'colors',
-    'label',
-    'label_tag' => 'h4',
-    'stats' => [],
-    'height' => 100,
-    'width' => 100,
-    'hollow_size' => '30%'
+    "id",
+    "series",
+    "colors",
+    "label",
+    "label_tag" => "h4",
+    "stats" => [],
+    "height" => 100,
+    "width" => 100,
+    "hollow_size" => "30%",
 ])
 
 <div class="flex flex-col items-center">
     <<?= $label_tag ?>>{{ $label }}</<?= $label_tag ?>>
     <div class="flex flex-col">
-        {{ $stats['value'] }}
+        {{ $stats["value"] }}
         out of
-        {{ $stats['full_value'] }}
+        {{ $stats["full_value"] }}
     </div>
     <div id="{{ $id }}"></div>
 </div>
@@ -29,7 +29,7 @@
                 chart: {
                     height: @json($height),
                     width: @json($width),
-                    type: "radialBar",
+                    type: 'radialBar',
                     sparkline: {
                         enabled: true,
                     },
@@ -45,7 +45,7 @@
                         hollow: {
                             margin: 0,
                             size: @json($hollow_size),
-                        }
+                        },
                     },
                 },
                 yaxis: {
@@ -53,11 +53,11 @@
                     labels: {
                         formatter: function (value) {
                             return value + '%';
-                        }
-                    }
-                }
-            }
-        }
+                        },
+                    },
+                },
+            };
+        };
 
         const el = document.getElementById(@json($id));
         if (el && typeof ApexCharts !== 'undefined') {

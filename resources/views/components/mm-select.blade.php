@@ -18,7 +18,7 @@
         {{
             $attributes->merge([
                 "class" => 'w-full border px-3 py-2 rounded border-mm-border bg-mm-dark-blue text-white
-                                                                focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
+                                                                                        focus:border-mm-orange focus:ring-1 focus:ring-mm-orange',
             ])
         }}
     >
