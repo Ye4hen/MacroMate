@@ -14,8 +14,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: "npm"
+          node-version: '22.x'
+          cache: 'npm'
 
       - name: Install NPM dependencies
         run: npm ci --no-audit --no-progress
@@ -36,6 +36,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download frontend build
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: public/build
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -47,9 +53,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.composer/cache
+            ~/.cache/composer
             vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -59,7 +65,10 @@ jobs:
       - name: Prepare environment
         run: |
           cp .env.example .env
+          mkdir -p database
           php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=database/database.sqlite" >> .env
           php artisan key:generate --ansi
 
       - name: Run PHPUnit
@@ -82,14 +91,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.composer/cache
+            ~/.cache/composer
             vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: composer install
+        run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run PHPStan
         run: composer run analyse
@@ -110,9 +119,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.composer/cache
+            ~/.cache/composer
             vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -131,11 +140,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: "npm"
+          node-version: '22.x'
+          cache: 'npm'
 
       - name: Install NPM dependencies
         run: npm ci --no-audit --no-progress
 
       - name: Prettier check
-        run: npm run format
+        run: npm run format:check
