@@ -89,23 +89,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Ensure phpstan cache cleared
-        run: |
-          ./vendor/bin/phpstan clear-result-cache || true
-          rm -rf phpstan-cache || true
-
-      - name: Debug larastan & phpstan (once)
-        run: |
-          echo "Checking larastan and phpstan..."
-          php -r "echo file_exists('vendor/larastan/larastan/extension.neon') ? 'larastan ext ok\n' : 'no larastan ext\n';"
-          ls -la vendor/larastan || true
-          ./vendor/bin/phpstan --version
-          ./vendor/bin/phpstan analyse --memory-limit=2G --debug || true
+        run: composer install
 
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+        run: composer run analyse
 
   php-cs-fixer:
     name: PHP-CS-Fixer (lint)
