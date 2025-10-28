@@ -101,9 +101,6 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Dump autoload
-        run: composer dump-autoload -o
-
       - name: Run PHPStan
         run: composer run analyse
 
