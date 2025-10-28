@@ -18,7 +18,7 @@ parameters:
     - %currentWorkingDirectory%/bootstrap/app.php
 
   ignoreErrors:
-    - message: '#Call to an undefined static method Tymon\\\\JWTAuth\\\\Facades\\\\JWTAuth::#'
+    - message: '#Call to an undefined static method .*JWTAuth::.*#'
 
   excludePaths:
     - vendor
