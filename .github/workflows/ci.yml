@@ -49,15 +49,11 @@ jobs:
           extensions: mbstring, bcmath, intl, sqlite, gd
           tools: composer:v2
 
-      - name: Setup composer cache & vendor cache
+      - name: Setup composer cache
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/composer
-            vendor
+          path: ~/.cache/composer
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
@@ -87,18 +83,26 @@ jobs:
           extensions: mbstring, bcmath, intl, sqlite, gd
           tools: composer:v2
 
-      - name: Setup composer cache & vendor cache
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          mkdir -p database
+          php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=database/database.sqlite" >> .env
+          php artisan key:generate --ansi || true
+
+      - name: Setup composer cache
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/composer
-            vendor
+          path: ~/.cache/composer
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Dump autoload
+        run: composer dump-autoload -o
 
       - name: Run PHPStan
         run: composer run analyse
@@ -115,15 +119,11 @@ jobs:
           php-version: 8.2
           tools: composer:v2
 
-      - name: Setup composer cache & vendor cache
+      - name: Setup composer cache
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/composer
-            vendor
+          path: ~/.cache/composer
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
