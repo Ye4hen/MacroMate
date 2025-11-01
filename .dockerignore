@@ -1,0 +1,11 @@
+.git
+node_modules
+npm-debug.log
+.env
+vendor
+storage
+public/storage
+.DS_Store
+.idea
+.vscode
+docker-compose.override.yml
