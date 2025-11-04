@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
-import legacy from "@vitejs/plugin-legacy";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -16,10 +15,6 @@ export default defineConfig(({ mode }) => {
                 ],
                 refresh: true,
             }),
-            legacy({
-                targets: ["defaults", "not IE 11"],
-                additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
-            }),
             tailwindcss(),
         ],
         resolve: {
@@ -28,14 +23,14 @@ export default defineConfig(({ mode }) => {
             },
         },
         server: {
-            host: "127.0.0.1",
+            host: "0.0.0.0",
             port: 1488,
             strictPort: true,
 
             hmr: {
-                host: "127.0.0.1",
-                protocol: "ws",
-            },
+              host: "host.docker.internal",
+              protocol: "ws"
+            }
         },
         build: {
             outDir: "public/build",
