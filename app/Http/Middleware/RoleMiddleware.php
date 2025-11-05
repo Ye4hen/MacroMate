@@ -18,8 +18,11 @@ class RoleMiddleware
         $user = auth()->user();
 
         if (!$user || !in_array($user->mu_role, $roles)) {
-            //            abort(403, 'User does not have the right role.');
-            return response()->json(['error' => 'User does not have the right role.'], 403);
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['error' => 'User does not have the right role.'], 403);
+            }
+
+            return redirect()->guest(route('dashboard'))->with('error', 'User does not have the right role.');
         }
 
         return $next($request);
