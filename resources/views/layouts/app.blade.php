@@ -16,7 +16,7 @@
         >
             <main>
                 @include("components.flash")
-                <div class="justify-items-center max-w-xl mx-auto">
+                <div class="max-w-xl mx-auto">
                     @yield("content")
                 </div>
             </main>
