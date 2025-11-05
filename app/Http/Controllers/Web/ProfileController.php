@@ -267,7 +267,9 @@ class ProfileController extends Controller
 
             $calories = (int)round(($user->mu_weight ?? 70) * 30 * $calories_index);
 
-            if(empty($user->mu_settings)) $user->mu_settings = [];
+            if (empty($user->mu_settings)) {
+                $user->mu_settings = [];
+            }
 
             $user->mu_settings['protein_percent'] = $proteins_percent;
             $user->mu_settings['fat_percent'] = $fat_percent;
