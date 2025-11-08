@@ -49,7 +49,7 @@ class ActivityRepository implements ActivityRepositoryInterface
         $activity->ma_code = $this->codes->generateCode($activity->ma_id);
         $activity->save();
 
-        Cache::tags(['catalogs'])->forget('catalog:activities');
+        $this->clearCache();
 
         return $activity->load('plans');
     }
@@ -68,7 +68,7 @@ class ActivityRepository implements ActivityRepositoryInterface
             $activity->plans()->sync($ids);
         }
 
-        Cache::tags(['catalogs'])->forget('catalog:activities');
+        $this->clearCache();
 
         return $activity->load('plans');
     }
@@ -78,7 +78,7 @@ class ActivityRepository implements ActivityRepositoryInterface
         $result = (bool)$activity->delete();
 
         if ($result) {
-          Cache::tags(['catalogs'])->forget('catalog:activities');
+            $this->clearCache();
         }
 
         return $result;
@@ -89,9 +89,15 @@ class ActivityRepository implements ActivityRepositoryInterface
         $result = $activity->restore();
 
         if ($result) {
-          Cache::tags(['catalogs'])->forget('catalog:activities');
+            $this->clearCache();
         }
 
         return $result;
+    }
+
+    private function clearCache(): void
+    {
+        Cache::tags(['stats'])->flush();
+        Cache::tags(['catalogs'])->forget('catalog:activities');
     }
 }

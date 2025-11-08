@@ -48,7 +48,7 @@ class FoodRepository implements FoodRepositoryInterface
         $food->mf_code = $this->codes->generateCode($food->mf_id);
         $food->save();
 
-        Cache::tags(['catalogs'])->forget('catalog:foods');
+        $this->clearCache();
 
         return $food->load('creator');
     }
@@ -57,7 +57,7 @@ class FoodRepository implements FoodRepositoryInterface
     {
         $food->fill($data)->save();
 
-        Cache::tags(['catalogs'])->forget('catalog:foods');
+        $this->clearCache();
 
         return $food->load(['creator', 'updater']);
     }
@@ -67,7 +67,7 @@ class FoodRepository implements FoodRepositoryInterface
         $result = (bool)$food->delete();
 
         if ($result) {
-            Cache::tags(['catalogs'])->forget('catalog:foods');
+            $this->clearCache();
         }
 
         return $result;
@@ -78,9 +78,15 @@ class FoodRepository implements FoodRepositoryInterface
         $result = $food->restore();
 
         if ($result) {
-            Cache::tags(['catalogs'])->forget('catalog:foods');
+            $this->clearCache();
         }
 
         return $result;
+    }
+
+    private function clearCache(): void
+    {
+        Cache::tags(['stats'])->flush();
+        Cache::tags(['catalogs'])->forget('catalog:foods');
     }
 }
