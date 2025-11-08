@@ -1,18 +1,16 @@
 services:
-  # Dev node service for Vite dev server (containerized Vite)
   node:
     image: node:22
     working_dir: /app
     volumes:
       - ./:/app:delegated
-      - /app/node_modules
+      - node_modules:/app/node_modules
     command: sh -c "npm ci --no-audit --no-progress && npm run dev"
     ports:
       - "1488:1488"
     environment:
       - CHOKIDAR_USEPOLLING=${CHOKIDAR_USEPOLLING:-false}
 
-  # dev wrapper app: overlays source code (selective mounts to avoid hiding vendor/build)
   app:
     image: macromate-app:local
     env_file: .env
@@ -20,31 +18,19 @@ services:
       - APP_ENV=local
       - DB_HOST=db
       - REDIS_HOST=redis
+    # overlay only the app files you edit to avoid hiding vendor/public/build from image
     volumes:
-      # Mount only the app code you edit so vendor & public/build from the image remain intact
       - ./app:/var/www/html/app:delegated
       - ./routes:/var/www/html/routes:delegated
       - ./resources:/var/www/html/resources:delegated
       - ./config:/var/www/html/config:delegated
       - ./database:/var/www/html/database:delegated
-      - ./public/uploads:/var/www/html/public/uploads:delegated   # example for uploaded files
-      - ./storage:/var/www/html/storage:delegated
-      - ~/.composer/cache:/root/.composer/cache # optional host composer cache
+      - ./public/uploads:/var/www/html/public/uploads:delegated
+      - ./storage:/var/www/html/storage:delegated     # mount host storage for dev
+      - ~/.composer/cache:/root/.composer/cache
     depends_on:
       - node
       - db
       - redis
     ports:
       - "9000:9000"
-
-  # Optionally override nginx to proxy directly to the app_dev container (you may keep base nginx)
-  nginx:
-    image: nginx:stable-alpine
-    ports:
-      - "8000:80"
-    volumes:
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./storage:/var/www/html/storage:ro
-      - ./public:/var/www/html/public:ro
-    depends_on:
-      - app
