@@ -23,7 +23,7 @@ class ActivityRepository implements ActivityRepositoryInterface
     {
         return Cache::tags(['catalogs'])
           ->remember('catalog:activities', now()->addHours(24), function () {
-              return Activity::orderBy('ma_name')->get();
+              return Activity::orderBy('ma_name')->limit(30)->get();
           });
     }
 
@@ -49,6 +49,8 @@ class ActivityRepository implements ActivityRepositoryInterface
         $activity->ma_code = $this->codes->generateCode($activity->ma_id);
         $activity->save();
 
+        Cache::tags(['catalogs'])->forget('catalog:activities');
+
         return $activity->load('plans');
     }
 
@@ -66,16 +68,30 @@ class ActivityRepository implements ActivityRepositoryInterface
             $activity->plans()->sync($ids);
         }
 
+        Cache::tags(['catalogs'])->forget('catalog:activities');
+
         return $activity->load('plans');
     }
 
     public function delete(Activity $activity): bool
     {
-        return (bool)$activity->delete();
+        $result = (bool)$activity->delete();
+
+        if ($result) {
+          Cache::tags(['catalogs'])->forget('catalog:activities');
+        }
+
+        return $result;
     }
 
     public function restore(Activity $activity): bool
     {
-        return $activity->restore();
+        $result = $activity->restore();
+
+        if ($result) {
+          Cache::tags(['catalogs'])->forget('catalog:activities');
+        }
+
+        return $result;
     }
 }

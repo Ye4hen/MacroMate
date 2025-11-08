@@ -7,7 +7,6 @@ use App\Domain\Models\Activity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -62,8 +61,6 @@ class AdminActivityController extends AdminController
 
         $this->activity_repository->create($payload);
 
-        Cache::tags(['catalog:activities'])->flush();
-
         return redirect()->route('admin.activities.index')->with('success', 'Activity created.');
     }
 
@@ -82,8 +79,6 @@ class AdminActivityController extends AdminController
         ];
 
         $this->activity_repository->update($activity, $payload);
-
-        Cache::tags(['catalogs', 'catalog:activities'])->flush();
 
         return redirect()->route('admin.activities.index')->with('success', 'Activity updated.');
     }

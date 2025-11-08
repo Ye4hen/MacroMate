@@ -8,7 +8,6 @@ use App\Jobs\ProcessFoodImage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -90,8 +89,6 @@ class AdminFoodController extends AdminController
             ProcessFoodImage::dispatch($food, $image_path, $image_disk);
         }
 
-        Cache::tags(['catalog:foods'])->flush();
-
         return redirect()->route('admin.foods.index')->with('success', 'Food created.');
     }
 
@@ -145,8 +142,6 @@ class AdminFoodController extends AdminController
         if ($new_path) {
             ProcessFoodImage::dispatch($updated_food, $new_path, $image_disk);
         }
-
-        Cache::tags(['catalogs', 'catalog:foods'])->flush();
 
         return redirect()->route('admin.foods.index')->with('success', 'Food updated.');
     }
