@@ -112,7 +112,8 @@ class DashboardController extends Controller
           ->where('mm_user', $user->mu_code)
           ->whereDate('mm_date', $date_string)
           ->orderBy('mm_order')
-          ->get();
+          ->get()
+          ->filter(fn ($meal) => $meal->foods->isNotEmpty());
 
         $meal_type_labels = collect(MealTypeEnum::cases())->map(fn ($c) => $c->value);
 

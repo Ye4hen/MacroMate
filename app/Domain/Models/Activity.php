@@ -4,6 +4,7 @@ namespace App\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Activity extends Model
@@ -43,5 +44,25 @@ class Activity extends Model
             'mpar_ma',
             'mpar_mp',
         );
+    }
+
+    public function userActivities(): HasMany
+    {
+        return $this->hasMany(UserActivity::class, 'ma_id', 'ma_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $activity) {
+            $activity->userActivities()->delete();
+        });
+
+        static::restored(function (self $activity) {
+            $activity->userActivities()->withTrashed()->restore();
+        });
+
+        static::forceDeleted(function (self $activity) {
+            $activity->userActivities()->withTrashed()->forceDelete();
+        });
     }
 }

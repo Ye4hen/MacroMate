@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -142,13 +144,37 @@ class Food extends Model
         );
     }
 
-    public function meals()
+    public function meals(): BelongsToMany
     {
         return $this->belongsToMany(
             Meal::class,
             'mm_meals_foods_relations',
             'mmfr_mf',
             'mmfr_mm'
-        )->withPivot(['mmfr_quantity', 'mmfr_unit']);
+        )
+        ->using(MealFood::class)
+        ->withPivot(['mmfr_quantity', 'mmfr_unit', 'mmfr_deleted_at'])
+        ->wherePivotNull('mmfr_deleted_at');
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $food) {
+            DB::table('mm_meals_foods_relations')
+                ->where('mmfr_mf', $food->mf_id)
+                ->update(['mmfr_deleted_at' => now()]);
+        });
+
+        static::restored(function (self $food) {
+            DB::table('mm_meals_foods_relations')
+              ->where('mmfr_mf', $food->mf_id)
+              ->update(['mmfr_deleted_at' => null]);
+        });
+
+        static::forceDeleted(function (self $food) {
+            DB::table('mm_meals_foods_relations')
+              ->where('mmfr_mf', $food->mf_id)
+              ->delete();
+        });
     }
 }

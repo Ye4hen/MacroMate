@@ -4,6 +4,7 @@ namespace App\Domain\Models;
 
 use App\Enums\MealTypeEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -61,7 +62,10 @@ class Meal extends Model
             'mm_meals_foods_relations',
             'mmfr_mm',
             'mmfr_mf'
-        )->withPivot(['mmfr_quantity', 'mmfr_unit']);
+        )
+        ->using(MealFood::class)
+        ->withPivot(['mmfr_quantity', 'mmfr_unit', 'mmfr_deleted_at'])
+        ->wherePivotNull('mmfr_deleted_at');
     }
 
     public function nutrients(): array
@@ -96,5 +100,26 @@ class Meal extends Model
         }
 
         return $totals;
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $meal) {
+            DB::table('mm_meals_foods_relations')
+                ->where('mmfr_mm', $meal->mm_id)
+                ->update(['mmfr_deleted_at' => now()]);
+        });
+
+        static::restored(function (self $meal) {
+            DB::table('mm_meals_foods_relations')
+              ->where('mmfr_mm', $meal->mm_id)
+              ->update(['mmfr_deleted_at' => null]);
+        });
+
+        static::forceDeleted(function (self $meal) {
+            DB::table('mm_meals_foods_relations')
+              ->where('mmfr_mm', $meal->mm_id)
+              ->delete();
+        });
     }
 }
