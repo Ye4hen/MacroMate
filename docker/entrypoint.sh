@@ -16,8 +16,10 @@ fi
 # 2) If APP_KEY env var is set, ensure .env has it (overwrite or append)
 if [ -n "${APP_KEY}" ]; then
   if grep -q '^APP_KEY=' .env 2>/dev/null; then
-    # replace existing APP_KEY line
-    sed -i "s/^APP_KEY=.*/APP_KEY=${APP_KEY}/" .env
+    # replace existing APP_KEY line safely (works with slashes, pluses, etc.)
+    awk -v key="$APP_KEY" 'BEGIN{OFS=ORS=""}
+      /^APP_KEY=/ { print "APP_KEY=" key "\n"; next }
+      { print $0 "\n" }' .env > .env.tmp && mv .env.tmp .env
   else
     printf "\nAPP_KEY=%s\n" "${APP_KEY}" >> .env
   fi
