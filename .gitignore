@@ -10,7 +10,8 @@
 /.idea
 /.nova
 /.phpunit.cache
-.php-cs-fixer.cache
+/.php-cs-fixer.cache
+/phpstan-cache/
 /.vscode
 /.zed
 /auth.json

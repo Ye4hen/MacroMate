@@ -39,7 +39,7 @@ class Activity extends Model
     public function plans(): BelongsToMany
     {
         return $this->belongsToMany(
-            \App\Domain\Models\Plan::class,
+            Plan::class,
             'mm_plans_activities_relations',
             'mpar_ma',
             'mpar_mp',
@@ -58,11 +58,15 @@ class Activity extends Model
         });
 
         static::restored(function (self $activity) {
-            $activity->userActivities()->withTrashed()->restore();
+            UserActivity::withTrashed()
+              ->where('ma_id', $activity->ma_id)
+              ->restore();
         });
 
         static::forceDeleted(function (self $activity) {
-            $activity->userActivities()->withTrashed()->forceDelete();
+            UserActivity::withTrashed()
+              ->where('ma_id', $activity->ma_id)
+              ->forceDelete();
         });
     }
 }
