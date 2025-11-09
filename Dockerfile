@@ -67,11 +67,11 @@ RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/fra
  && chown -R www-data:www-data storage bootstrap/cache public/storage \
  && chmod -R 775 storage bootstrap/cache public/storage
 
+COPY docker/nginx/macromate.conf.template /etc/nginx/conf.d/macromate.conf.template
+RUN rm -f /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.default || true
+
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-
-COPY docker/nginx/default.conf /etc/nginx/conf.d/macromate.conf
-RUN rm -f /etc/nginx/conf.d/default.conf || true
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 EXPOSE 80

@@ -44,15 +44,30 @@ fi
 chown -R www-data:www-data storage bootstrap/cache public/storage || true
 chmod -R 775 storage bootstrap/cache public/storage || true
 
+if [ -f /etc/nginx/conf.d/macromate.conf.template ]; then
+  echo "[entrypoint] rendering nginx config from template (PORT=${PORT:-80})"
+  # remove default site files if present to avoid conflicts
+  rm -f /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.default /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default || true
+
+  # substitute PORT into conf (envsubst is usually present)
+  /bin/sh -c "export PORT=${PORT:-80} && envsubst '\$\{PORT:-80\}' < /etc/nginx/conf.d/macromate.conf.template > /etc/nginx/conf.d/macromate.conf" || {
+    # fallback: simple sed substitute if envsubst absent
+    sed "s/\${PORT:-80}/${PORT:-80}/g" /etc/nginx/conf.d/macromate.conf.template > /etc/nginx/conf.d/macromate.conf || true
+  }
+
+  echo "[entrypoint] nginx config rendered at /etc/nginx/conf.d/macromate.conf"
+fi
+
+# Start php-fpm (background)
 php-fpm -D
 
-# start nginx only if requested (default: false)
+# Start nginx only if requested (for compose vs single-container)
 if [ "${START_NGINX:-0}" != "0" ]; then
   echo "[entrypoint] starting nginx"
   nginx -g 'daemon off;'
 else
   echo "[entrypoint] skipping nginx (START_NGINX not set)"
-  # keep container running as php-fpm is already started in background
+  # keep container alive so php-fpm stays up (Render normally needs nginx)
   tail -f /dev/null
 fi
 
