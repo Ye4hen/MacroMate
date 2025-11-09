@@ -70,6 +70,9 @@ RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/fra
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+COPY docker/nginx/default.conf /etc/nginx/conf.d/macromate.conf
+RUN rm -f /etc/nginx/conf.d/default.conf || true
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 EXPOSE 80
 CMD ["php-fpm"]

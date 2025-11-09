@@ -13,6 +13,7 @@ services:
       - APP_ENV=${APP_ENV:-local}
       - DB_HOST=db
       - REDIS_HOST=redis
+      - START_NGINX=0
     volumes:
       - storage_data:/var/www/html/storage
     depends_on:
