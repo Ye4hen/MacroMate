@@ -29,6 +29,7 @@ RUN apt-get update \
        libonig-dev \
        pkg-config \
        ca-certificates \
+       nginx \
   && rm -rf /var/lib/apt/lists/*
 
 # Configure & install PHP extensions required by your project (once)
@@ -63,7 +64,6 @@ RUN php artisan package:discover --ansi
 # Ensure storage directories exist and have correct permissions,
 # and create public/storage symlink inside the image
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache public/storage \
- && php artisan storage:link || true \
  && chown -R www-data:www-data storage bootstrap/cache public/storage \
  && chmod -R 775 storage bootstrap/cache public/storage
 
@@ -71,5 +71,5 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-EXPOSE 9000
+EXPOSE 80
 CMD ["php-fpm"]
