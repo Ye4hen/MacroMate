@@ -28,7 +28,9 @@
             ])
         }}
     >
-        @if (! isset($slot) || ! trim($slot->toHtml()))
+        @if (! $slot->isEmpty())
+            {!! $slot !!}
+        @else
             @foreach ($options as $key => $text)
                 <option
                     value="{{ $key }}"
@@ -37,8 +39,6 @@
                     {{ $text }}
                 </option>
             @endforeach
-        @else
-            {!! $slot !!}
         @endif
     </select>
 

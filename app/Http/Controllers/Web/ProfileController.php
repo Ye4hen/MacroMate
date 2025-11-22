@@ -189,9 +189,9 @@ class ProfileController extends Controller
     public function updateMacros(Request $request)
     {
         $user = $request->user();
-        /** @var \App\Domain\Models\Plan $plan */
+        /** @var \App\Domain\Models\Plan | null $plan */
         $plan = $user->plan;
-        $plan_pfc = (array)$plan->mp_pfc;
+        $plan_pfc = (array)$plan?->mp_pfc;
         $current_settings = (array)$user->mu_settings;
 
         $calories_for_limit = (int) ($request->input('calories') ?? $current_settings['calories'] ?? (int) round(($user->mu_weight ?? 70) * 30 * ($user->plan->mp_cal_index ?? 1)));
