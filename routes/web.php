@@ -103,3 +103,8 @@ Route::middleware('jwt')->group(function () {
         });
     });
 });
+
+// temporary debug
+Route::get('/debug/logs', function () {
+    return nl2br(file_get_contents(storage_path('logs/laravel.log')));
+});
