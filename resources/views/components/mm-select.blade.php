@@ -1,13 +1,15 @@
-@php
-    $name = $name ?? "";
-    $label = $label ?? "";
-    $options = $options ?? [];
-    $value = $value ?? null;
-    $required = $required ?? false;
-    $attributes = $attributes ?? new \Illuminate\View\ComponentAttributeBag();
+@props([
+    "label" => "",
+    "name" => "",
+    "options" => [],
+    "value" => null,
+    "required" => false,
+])
 
-    $selected = $value ? $value : old($name);
-    $errors = $errors ?? (session()->get("errors") ?? new \Illuminate\Support\ViewErrorBag());
+@php
+    use Illuminate\Support\ViewErrorBag;
+    $selected = $value ?? old($name);
+    $errors = $errors ?? (session()->get("errors") ?? new ViewErrorBag());
 @endphp
 
 <div>
@@ -28,7 +30,7 @@
             ])
         }}
     >
-        @if ($slot && ! $slot->isEmpty())
+        @if (! $slot?->isEmpty())
             {!! $slot !!}
         @else
             @foreach ($options as $key => $text)
