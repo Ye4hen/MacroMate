@@ -51,6 +51,13 @@ if [ -n "${AIVEN_CA:-}" ]; then
 fi
 
 # -------------------------
+# 5) Run seeders
+# -------------------------
+if [ "${RUN_SEEDERS:-0}" = "1" ]; then
+  php artisan db:seed || true
+fi
+
+# -------------------------
 # 5) Clear Laravel caches
 # -------------------------
 echo "[entrypoint] clearing Laravel caches"
