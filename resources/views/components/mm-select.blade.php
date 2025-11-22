@@ -28,7 +28,7 @@
             ])
         }}
     >
-        @if (! $slot->isEmpty())
+        @if ($slot && ! $slot->isEmpty())
             {!! $slot !!}
         @else
             @foreach ($options as $key => $text)
