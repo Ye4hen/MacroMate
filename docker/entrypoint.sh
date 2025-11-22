@@ -41,7 +41,17 @@ if ! grep -q '^APP_KEY=' .env 2>/dev/null || grep -q '^APP_KEY=$' .env 2>/dev/nu
 fi
 
 # -------------------------
-# 4) Clear Laravel caches (ensures env changes take effect without shell access)
+# 4) Write Aiven CA if provided
+# -------------------------
+if [ -n "${AIVEN_CA:-}" ]; then
+  echo "[entrypoint] writing AIVEN CA to /etc/ssl/certs/aiven-ca.pem"
+  mkdir -p /etc/ssl/certs
+  printf '%s\n' "$AIVEN_CA" > /etc/ssl/certs/aiven-ca.pem
+  chmod 644 /etc/ssl/certs/aiven-ca.pem
+fi
+
+# -------------------------
+# 5) Clear Laravel caches
 # -------------------------
 echo "[entrypoint] clearing Laravel caches"
 php artisan config:clear || true
@@ -50,7 +60,7 @@ php artisan view:clear || true
 php artisan cache:clear || true
 
 # -------------------------
-# 5) Create storage symlink idempotently
+# 6) Create storage symlink idempotently
 # -------------------------
 # Use -e so it handles file/symlink/dir absence correctly
 if [ ! -e public/storage ]; then
@@ -61,14 +71,14 @@ else
 fi
 
 # -------------------------
-# 6) Ensure permissions (best-effort)
+# 7) Ensure permissions (best-effort)
 # -------------------------
 echo "[entrypoint] setting permissions (best-effort)"
 chown -R www-data:www-data storage bootstrap/cache public/storage 2>/dev/null || true
 chmod -R 775 storage bootstrap/cache public/storage 2>/dev/null || true
 
 # -------------------------
-# 7) Render nginx config from template (if present)
+# 8) Render nginx config from template (if present)
 # -------------------------
 if [ -f /etc/nginx/conf.d/macromate.conf.template ]; then
   echo "[entrypoint] rendering nginx config from template (PORT=${PORT:-80})"
@@ -93,7 +103,7 @@ if [ -f /etc/nginx/conf.d/macromate.conf.template ]; then
 fi
 
 # -------------------------
-# 8) Start services
+# 9) Start services
 # -------------------------
 echo "[entrypoint] starting php-fpm"
 php-fpm -D
