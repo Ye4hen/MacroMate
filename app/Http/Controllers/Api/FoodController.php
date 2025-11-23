@@ -65,7 +65,7 @@ class FoodController extends Controller
         $data['mf_created_by'] = $user->getUserCode();
 
         $image_path = '';
-        $image_disk = 'public';
+        $image_disk = 'r2';
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -112,7 +112,7 @@ class FoodController extends Controller
         $old_disk = $food->getAttributes()['mf_image_disk'] ?? 'public';
 
         $new_image_path = $data['mf_image_url'] ?? null;
-        $new_image_disk = $data['mf_image_disk'] ?? ($new_image_path ? 'public' : null);
+        $new_image_disk = $data['mf_image_disk'] ?? ($new_image_path ? 'r2' : null);
 
         $updated_food = $this->foods->update($food, $data);
 

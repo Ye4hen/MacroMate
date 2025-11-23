@@ -59,7 +59,7 @@ class AdminFoodController extends AdminController
         $validated = $this->validateData($request);
 
         $image_path = '';
-        $image_disk = 'public';
+        $image_disk = 'r2';
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -116,7 +116,7 @@ class AdminFoodController extends AdminController
         ];
 
         $new_path = $food->getAttributes()['mf_image_url'] ?? null;
-        $image_disk = 'public';
+        $image_disk = 'r2';
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
