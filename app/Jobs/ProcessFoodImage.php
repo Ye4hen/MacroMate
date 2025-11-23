@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Encoders\AvifEncoder;
 use Intervention\Image\Encoders\JpegEncoder;
@@ -89,10 +90,10 @@ class ProcessFoodImage implements ShouldQueue
                 $encoded_jpg = $img->encode(new JpegEncoder(quality: $quality_jpeg));
                 $filename_jpg = "w{$size}_{$random_slug}.jpg";
                 $path_jpg = $base_folder . $filename_jpg;
-                $disk_instance->put($path_jpg, $encoded_jpg->toString(), 'public');
+                $disk_instance->put($path_jpg, $encoded_jpg->toString(), ['visibility' => 'public']);
                 $variants['jpeg'][(string)$size] = $path_jpg;
             } catch (Exception $e) {
-                // continue on error
+                Log::error('ProcessFoodImage: jpeg failed', ['size'=>$size,'err'=>$e->getMessage()]);
             }
 
             // WEBP
@@ -106,10 +107,10 @@ class ProcessFoodImage implements ShouldQueue
 
                 $filename_webp = "w{$size}_{$random_slug}.webp";
                 $path_webp = $base_folder . $filename_webp;
-                $disk_instance->put($path_webp, $encoded_webp->toString(), 'public');
+                $disk_instance->put($path_webp, $encoded_webp->toString(), ['visibility' => 'public']);
                 $variants['webp'][(string)$size] = $path_webp;
             } catch (Exception $e) {
-                // webp may not be supported - ignore
+                Log::error('ProcessFoodImage: webp failed', ['size'=>$size,'err'=>$e->getMessage()]);
             }
 
             // AVIF (best effort)
@@ -123,10 +124,11 @@ class ProcessFoodImage implements ShouldQueue
 
                 $filename_avif = "w{$size}_{$random_slug}.avif";
                 $path_avif = $base_folder . $filename_avif;
-                $disk_instance->put($path_avif, $encoded_avif->toString(), 'public');
+                $disk_instance->put($path_avif, $encoded_avif->toString(), ['visibility' => 'public']);
                 $variants['avif'][(string)$size] = $path_avif;
 
             } catch (Exception $e) {
+              Log::error('ProcessFoodImage: avif failed', ['size'=>$size,'err'=>$e->getMessage()]);
             }
         }
 
@@ -137,7 +139,7 @@ class ProcessFoodImage implements ShouldQueue
 
             $encoded_thumb = $thumb_img->encode(new JpegEncoder(quality: 75));
             $thumb_path = $base_folder . "thumb_{$random_slug}.jpg";
-            $disk_instance->put($thumb_path, $encoded_thumb->toString(), 'public');
+            $disk_instance->put($thumb_path, $encoded_thumb->toString(), ['visibility' => 'public']);
             $variants['thumbnail'] = $thumb_path;
         } catch (Exception $e) {
         }
@@ -147,6 +149,7 @@ class ProcessFoodImage implements ShouldQueue
             $this->food->mf_image_variants = array_merge($existing, $variants);
             $this->food->save();
         } catch (Exception $e) {
+          Log::error('ProcessFoodImage: thumbnail failed', ['size'=>$size,'err'=>$e->getMessage()]);
         }
 
         try {
