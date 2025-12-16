@@ -107,7 +107,7 @@ class FoodTest extends TestCase
 
     public function test_store_creates_new_food(): void
     {
-        Storage::fake('public');
+        Storage::fake('r2');
 
         $file = UploadedFile::fake()->image('food.jpg', 800, 600)->size(1200); // size in KB
         $data = [
