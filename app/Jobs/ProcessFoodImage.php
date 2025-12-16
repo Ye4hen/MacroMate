@@ -93,7 +93,7 @@ class ProcessFoodImage implements ShouldQueue
                 $disk_instance->put($path_jpg, $encoded_jpg->toString(), ['visibility' => 'public']);
                 $variants['jpeg'][(string)$size] = $path_jpg;
             } catch (Exception $e) {
-                Log::error('ProcessFoodImage: jpeg failed', ['size'=>$size,'err'=>$e->getMessage()]);
+                Log::error('ProcessFoodImage: jpeg failed', ['size' => $size,'err' => $e->getMessage()]);
             }
 
             // WEBP
@@ -110,7 +110,7 @@ class ProcessFoodImage implements ShouldQueue
                 $disk_instance->put($path_webp, $encoded_webp->toString(), ['visibility' => 'public']);
                 $variants['webp'][(string)$size] = $path_webp;
             } catch (Exception $e) {
-                Log::error('ProcessFoodImage: webp failed', ['size'=>$size,'err'=>$e->getMessage()]);
+                Log::error('ProcessFoodImage: webp failed', ['size' => $size,'err' => $e->getMessage()]);
             }
 
             // AVIF (best effort)
@@ -128,7 +128,7 @@ class ProcessFoodImage implements ShouldQueue
                 $variants['avif'][(string)$size] = $path_avif;
 
             } catch (Exception $e) {
-              Log::error('ProcessFoodImage: avif failed', ['size'=>$size,'err'=>$e->getMessage()]);
+                Log::error('ProcessFoodImage: avif failed', ['size' => $size,'err' => $e->getMessage()]);
             }
         }
 
@@ -149,7 +149,7 @@ class ProcessFoodImage implements ShouldQueue
             $this->food->mf_image_variants = array_merge($existing, $variants);
             $this->food->save();
         } catch (Exception $e) {
-          Log::error('ProcessFoodImage: thumbnail failed', ['size'=>$size,'err'=>$e->getMessage()]);
+            Log::error('ProcessFoodImage: thumbnail failed', ['size' => $size,'err' => $e->getMessage()]);
         }
 
         try {
