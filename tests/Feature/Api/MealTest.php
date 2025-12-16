@@ -97,7 +97,7 @@ class MealTest extends TestCase
             'date' => '2025-08-14',
             'foods' => [
                 [
-                    'code' => '0000W7takabKn',
+                    'code' => 'F001',
                     'quantity' => 100,
                     'unit' => 'grams',
                 ],
@@ -126,8 +126,8 @@ class MealTest extends TestCase
             'date' => '2025-08-14',
             'foods' => [
                 [
-                    'code' => '0000W7takabKn',
-                    'name' => 'Vanilla Protein Shake',
+                    'code' => 'F001',
+                    'name' => 'Apple',
                     'quantity' => 100,
                     'unit' => 'grams',
                 ],
@@ -192,7 +192,7 @@ class MealTest extends TestCase
             'date' => '2025-08-14',
             'foods' => [
                 [
-                    'code' => '0000W7takabKn',
+                    'code' => 'F001',
                     'quantity' => 100,
                     'unit' => 'grams',
                 ],
