@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Domain\Models\Food;
 use Illuminate\Database\Seeder;
 
-class Foods100Seeder extends Seeder
+class TestFoodsSeeder extends Seeder
 {
     /**
      * Seed the application's database with ~100 single-ingredient foods & drinks.
