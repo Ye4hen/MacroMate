@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @property int                              $mf_cals
@@ -62,17 +63,26 @@ class Food extends Model
             return '';
         }
 
-        if (str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+        if (Str::startsWith($image, ['http://', 'https://'])) {
             return $image;
         }
 
         $disk = $this->mf_image_disk ?? 'public';
 
         try {
-            if (Storage::disk($disk)->exists($image)) {
-                return Storage::disk($disk)->url($image);
+            $disk_instance = Storage::disk($disk);
+
+            if (! $disk_instance->exists($image)) {
+                return '';
             }
+
+            if (in_array($disk, ['r2', 's3'], true) && method_exists($disk_instance, 'temporaryUrl')) {
+                return $disk_instance->temporaryUrl($image, now()->addHour());
+            }
+
+            return $disk_instance->url($image);
         } catch (\Throwable $e) {
+            return '';
         }
 
         return '';
@@ -93,7 +103,15 @@ class Food extends Model
             $disk = $this->mf_image_disk ?? config('filesystems.default', 'public');
 
             try {
-                return Storage::disk($disk)->url($path);
+                $disk_instance = Storage::disk($disk);
+
+                if ($disk_instance->exists($path)) {
+                    if (in_array($disk, ['r2', 's3'], true) && method_exists($disk_instance, 'temporaryUrl')) {
+                        return $disk_instance->temporaryUrl($path, now()->addHour());
+                    }
+
+                    return $disk_instance->url($path);
+                }
             } catch (\Throwable $e) {
                 return '';
             }
