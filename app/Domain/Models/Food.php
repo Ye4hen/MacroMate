@@ -76,7 +76,7 @@ class Food extends Model
                 return '';
             }
 
-            if (in_array($disk, ['r2', 's3'], true) && method_exists($disk_instance, 'temporaryUrl')) {
+            if (in_array($disk, ['r2', 's3'], true)) {
                 return $disk_instance->temporaryUrl($image, now()->addHour());
             }
 
@@ -84,8 +84,6 @@ class Food extends Model
         } catch (\Throwable $e) {
             return '';
         }
-
-        return '';
     }
 
     public function getImageVariantUrl(string $format = 'webp', int $width = 300): string
@@ -106,7 +104,7 @@ class Food extends Model
                 $disk_instance = Storage::disk($disk);
 
                 if ($disk_instance->exists($path)) {
-                    if (in_array($disk, ['r2', 's3'], true) && method_exists($disk_instance, 'temporaryUrl')) {
+                    if (in_array($disk, ['r2', 's3'], true)) {
                         return $disk_instance->temporaryUrl($path, now()->addHour());
                     }
 
