@@ -76,7 +76,7 @@
                                         />
                                     @else
                                         <div
-                                            class="w-14 h-14 rounded bg-mm-light-gray flex items-center justify-center text-sm text-mm-gray"
+                                            class="w-10 h-10 rounded bg-mm-light-gray flex items-center justify-center text-sm text-mm-gray"
                                         >
                                             N/A
                                         </div>

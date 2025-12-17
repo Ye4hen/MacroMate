@@ -37,6 +37,16 @@ class ProcessFoodImage implements ShouldQueue
         }
     }
 
+    private function mimeForExt(string $ext): string
+    {
+        return match (strtolower($ext)) {
+            'jpg','jpeg' => 'image/jpeg',
+            'webp' => 'image/webp',
+            'avif' => 'image/avif',
+            default => 'application/octet-stream',
+        };
+    }
+
     public function handle(): void
     {
         $disk = $this->disk;
@@ -80,17 +90,16 @@ class ProcessFoodImage implements ShouldQueue
         $random_slug = substr(md5(uniqid((string) $this->food->mf_id, true)), 0, 8);
 
         foreach ($sizes as $size) {
+            $img = $this->manager->read($content);
+            /** @var \Intervention\Image\Image $img */
+            $img->resize($size, $size);
+
             // JPEG
             try {
-                $img = $this->manager->read($content);
-
-                /** @var \Intervention\Image\Image $img */
-                $img->resize($size, $size);
-
-                $encoded_jpg = $img->encode(new JpegEncoder(quality: $quality_jpeg));
+                $encoded_jpg = $img->encode(new JpegEncoder(quality: $quality_jpeg))->toString();
                 $filename_jpg = "w{$size}_{$random_slug}.jpg";
                 $path_jpg = $base_folder . $filename_jpg;
-                $disk_instance->put($path_jpg, $encoded_jpg->toString(), ['visibility' => 'public']);
+                $disk_instance->put($path_jpg, $encoded_jpg, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('jpg')]);
                 $variants['jpeg'][(string)$size] = $path_jpg;
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: jpeg failed', ['size' => $size,'err' => $e->getMessage()]);
@@ -98,16 +107,11 @@ class ProcessFoodImage implements ShouldQueue
 
             // WEBP
             try {
-                $img_webp = $this->manager->read($content);
-
-                /** @var \Intervention\Image\Image $img_webp */
-                $img_webp->resize($size, $size);
-
-                $encoded_webp = $img_webp->encode(new WebpEncoder(quality: $quality_webp));
+                $encoded_webp = $img->encode(new WebpEncoder(quality: $quality_webp))->toString();
 
                 $filename_webp = "w{$size}_{$random_slug}.webp";
                 $path_webp = $base_folder . $filename_webp;
-                $disk_instance->put($path_webp, $encoded_webp->toString(), ['visibility' => 'public']);
+                $disk_instance->put($path_webp, $encoded_webp, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('webp')]);
                 $variants['webp'][(string)$size] = $path_webp;
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: webp failed', ['size' => $size,'err' => $e->getMessage()]);
@@ -115,18 +119,12 @@ class ProcessFoodImage implements ShouldQueue
 
             // AVIF (best effort)
             try {
-                $img_avif = $this->manager->read($content);
-
-                /** @var \Intervention\Image\Image $img_avif */
-                $img_avif->resize($size, $size);
-
-                $encoded_avif = $img_avif->encode(new AvifEncoder(quality: 50));
+                $encoded_avif = $img->encode(new AvifEncoder(quality: 50))->toString();
 
                 $filename_avif = "w{$size}_{$random_slug}.avif";
                 $path_avif = $base_folder . $filename_avif;
-                $disk_instance->put($path_avif, $encoded_avif->toString(), ['visibility' => 'public']);
+                $disk_instance->put($path_avif, $encoded_avif, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('avif')]);
                 $variants['avif'][(string)$size] = $path_avif;
-
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: avif failed', ['size' => $size,'err' => $e->getMessage()]);
             }
