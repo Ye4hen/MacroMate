@@ -49,7 +49,6 @@ class PlanTest extends TestCase
                     'name',
                     'calories_index',
                     'pfc',
-                    'activities',
                     'created_at',
                     'updated_at',
                 ],
@@ -108,7 +107,6 @@ class PlanTest extends TestCase
                 'fat' => 50,
                 'carbs' => 250,
             ],
-            'activity_codes' => [],
         ];
 
         $response = $this->postJson('/api/plan', $data, $this->auth_header);
@@ -120,7 +118,6 @@ class PlanTest extends TestCase
                 'name',
                 'calories_index',
                 'pfc',
-                'activities',
                 'created_at',
                 'updated_at',
             ],

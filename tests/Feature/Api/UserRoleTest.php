@@ -46,8 +46,6 @@ class UserRoleTest extends TestCase
                 '*' => [
                     'code',
                     'name',
-                    'created_at',
-                    'updated_at',
                 ],
             ],
         ]);
@@ -111,8 +109,6 @@ class UserRoleTest extends TestCase
             'data' => [
                 'code',
                 'name',
-                'created_at',
-                'updated_at',
             ],
         ]);
         $response->assertJsonFragment([
