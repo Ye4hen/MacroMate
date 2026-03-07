@@ -155,9 +155,8 @@ class AdminFoodController extends AdminController
 
     private function validateData(Request $request, ?Food $food = null): array
     {
-        $image_rules = $food
-          ? ['sometimes', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,avif', 'max:5120']
-          : ['required', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,avif', 'max:5120'];
+        // making image not required until cdn problem will be resolved
+        $image_rules = ['sometimes', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,avif', 'max:5120'];
 
         $name_rules = $food
           ? ['required', 'string', 'max:255', Rule::unique('mm_foods', 'mf_name')->whereNull('mf_deleted_at')->ignore($food->mf_code, 'mf_code')]

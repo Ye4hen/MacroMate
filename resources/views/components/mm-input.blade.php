@@ -19,7 +19,7 @@
     }
 @endphp
 
-<div>
+<div class="{{ $rootClasses }}">
     <label
         for="{{ $name }}"
         class="flex items-center text-sm font-medium text-mm-light-gray mb-1"

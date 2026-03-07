@@ -46,20 +46,6 @@ class AuthController extends Controller
                 ->withErrors(['email' => 'Authentication failed (no token returned).']);
         }
 
-        $ttl = (int)config('jwt.ttl', 60);
-
-        $cookie = cookie(
-            'jwt',
-            $token,
-            $ttl,
-            '/',
-            null,
-            app()->environment('production'), // secure only in production
-            true,
-            false,
-            'Lax'
-        );
-
         try {
             $user = JWTAuth::setToken($token)->authenticate();
 
@@ -70,7 +56,7 @@ class AuthController extends Controller
             Log::warning('JWT parse after API login failed: ' . $e->getMessage());
         }
 
-        return redirect()->intended(route('profile'))->withCookie($cookie)->with('success', 'Signed in successfully.');
+        return redirect()->intended(route('profile'))->withCookie($resp['server_cookie'])->with('success', 'Signed in successfully.');
     }
 
     public function showRegister()
@@ -102,10 +88,6 @@ class AuthController extends Controller
                 ->withErrors(['email' => 'Registration succeeded but token missing.']);
         }
 
-        $ttl = (int)config('jwt.ttl', 60);
-
-        $cookie = cookie('jwt', $token, $ttl, '/', null, app()->environment('production'), true, false, 'Lax');
-
         try {
             $user = JWTAuth::setToken($token)->authenticate();
 
@@ -116,7 +98,7 @@ class AuthController extends Controller
             Log::warning('JWT parse after API register failed: ' . $e->getMessage());
         }
 
-        return redirect()->intended(route('profile'))->withCookie($cookie)->with('success', 'Account created and signed in.');
+        return redirect()->intended(route('profile'))->withCookie($resp['server_cookie'])->with('success', 'Account created and signed in.');
     }
 
     public function logout(Request $request): \Illuminate\Http\RedirectResponse

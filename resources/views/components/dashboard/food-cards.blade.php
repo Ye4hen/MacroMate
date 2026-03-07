@@ -8,7 +8,8 @@
     @php
         $code = $food->mf_code;
         $name = $food->mf_name;
-        $img = $food->getImageVariantUrl("webp", 300);
+        // temporary commenting until the cdn problem will be resolved
+        // $img = $food->getImageVariantUrl("webp", 300);
         $cals = (int) $food->mf_cals;
         $unit_label = $food->mf_type === FoodTypeEnum::DRINK ? "ml" : "g";
     @endphp
@@ -17,25 +18,28 @@
         class="food-card bg-white dark:bg-slate-900 border rounded-lg p-3 flex items-start gap-3"
         data-food-code="{{ $code }}"
     >
-        <div class="flex-shrink-0">
+        {{-- temporary commenting until the cdn problem will be resolved --}}
+        {{--
+            <div class="flex-shrink-0">
             @if ($img)
-                <img
-                    src="{{ $img }}"
-                    alt="Image of the {{ $name }}"
-                    class="w-14 h-14 rounded object-cover"
-                />
+            <img
+            src="{{ $img }}"
+            alt="Image of the {{ $name }}"
+            class="w-14 h-14 rounded object-cover"
+            />
             @else
-                <div
-                    class="w-14 h-14 rounded bg-mm-light-gray flex items-center justify-center text-sm text-mm-gray"
-                >
-                    N/A
-                </div>
+            <div
+            class="w-14 h-14 rounded bg-mm-light-gray flex items-center justify-center text-sm text-mm-gray"
+            >
+            N/A
+            </div>
             @endif
-        </div>
+            </div>
+        --}}
 
         <div class="flex-1 min-w-0">
-            <div class="flex items-start justify-between gap-2 flex-wrap">
-                <div>
+            <div class="flex items-start justify-end gap-2 flex-wrap">
+                <div class="text-right">
                     <div
                         class="font-medium text-slate-800 dark:text-slate-100 break-word"
                     >
@@ -52,6 +56,7 @@
                     <div class="flex items-center gap-2">
                         <x-mm-input
                             type="number"
+                            rootClasses="flex flex-col items-end"
                             name="quantity_{{ $code }}"
                             label="{{ $unit_label === 'ml' ? 'ml' : 'grams' }}"
                             data-food-qty-input="{{ $code }}"

@@ -19,6 +19,7 @@ class MMInput extends Component
         public bool $required = false,
         public bool $autofocus = false,
         public string $label_tooltip = '',
+        public string $rootClasses = '',
     ) {
         $this->value ??= old($this->name);
     }

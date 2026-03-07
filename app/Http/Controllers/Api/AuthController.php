@@ -38,7 +38,9 @@ class AuthController extends Controller
         return response()->json([
             'token' => $result['token'],
             'user' => new UserResource($result['user']),
-        ], 201);
+        ], 201)
+        ->withCookie($result['server_cookie'])
+        ->withCookie($result['client_cookie']);
     }
 
     public function login(Request $request): JsonResponse
@@ -50,7 +52,12 @@ class AuthController extends Controller
 
         $result = $this->auth_service->login($validated);
 
-        return response()->json($result);
+        return response()->json([
+            'token' => $result['token'],
+            'user' => new UserResource($result['user']),
+        ], 201)
+        ->withCookie($result['server_cookie'])
+        ->withCookie($result['client_cookie']);
     }
 
     public function logout(): JsonResponse

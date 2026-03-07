@@ -30,6 +30,10 @@ RUN apt-get update \
        pkg-config \
        ca-certificates \
        nginx \
+       libmagickwand-dev libmagickcore-dev \
+       libavif-dev \
+  && pecl install imagick \
+  && docker-php-ext-enable imagick \
   && rm -rf /var/lib/apt/lists/*
 
 # Configure & install PHP extensions required by your project (once)

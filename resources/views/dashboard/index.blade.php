@@ -31,7 +31,7 @@
             <i class="fa-solid fa-arrow-right"></i>
         </a>
     </div>
-    <div class="flex items-center justify-center gap-x-5 flex-wrap">
+    <div class="flex items-end gap-x-5 overflow-auto mb-5">
         <x-charts.mm-chart-radial
             id="mm-chart-radial-calories"
             label="Calories"
@@ -62,10 +62,6 @@
                 "full_value" => $todays_macros["water"]
             ]'
         />
-    </div>
-    <div
-        class="grid md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-5"
-    >
         <x-charts.mm-chart-radial
             id="mm-chart-radial-proteins"
             label="Protein"

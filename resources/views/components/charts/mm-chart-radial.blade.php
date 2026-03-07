@@ -10,7 +10,7 @@
     "hollow_size" => "30%",
 ])
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center text-center">
     <<?= $label_tag ?>>{{ $label }}</<?= $label_tag ?>>
     <div class="flex flex-col">
         {{ $stats["value"] }}

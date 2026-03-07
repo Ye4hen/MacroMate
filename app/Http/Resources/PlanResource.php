@@ -17,9 +17,6 @@ class PlanResource extends JsonResource
             'name' => $this->mp_name,
             'calories_index' => (float)$this->mp_cal_index,
             'pfc' => $this->mp_pfc,
-            'activities' => ActivityResource::collection(
-                $this->whenLoaded('activities') ?? collect()
-            ),
             'created_at' => $this->mp_created_at->toIso8601String(),
             'updated_at' => $this->mp_updated_at->toIso8601String(),
         ];

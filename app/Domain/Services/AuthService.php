@@ -25,6 +25,19 @@ readonly class AuthService
 
         try {
             $token = JWTAuth::fromUser($user);
+            $ttl = (int)config('jwt.ttl', 60);
+            $server_cookie = cookie('jwt', $token, $ttl, '/', null, app()->environment('production'), true, false, 'Lax');
+            $client_cookie = cookie(
+                'is_authenticated',
+                'true',
+                $ttl,
+                '/',
+                null,
+                app()->environment('production'),
+                false,
+                false,
+                'Lax'
+            );
         } catch (JWTException $e) {
             throw new \RuntimeException('Could not create token');
         }
@@ -32,6 +45,8 @@ readonly class AuthService
         return [
           'token' => $token,
           'user' => $user,
+          'client_cookie' => $client_cookie,
+          'server_cookie' => $server_cookie,
         ];
     }
 
@@ -46,13 +61,29 @@ readonly class AuthService
             if (!$token = JWTAuth::attempt($jwt_credentials)) {
                 throw new \RuntimeException('Invalid credentials');
             }
+            $user = $this->users->findByEmail($credentials['email']);
+            $ttl = (int)config('jwt.ttl', 60);
+            $server_cookie = cookie('jwt', $token, $ttl, '/', null, app()->environment('production'), true, false, 'Lax');
+            $client_cookie = cookie(
+                'is_authenticated',
+                'true',
+                $ttl,
+                '/',
+                null,
+                app()->environment('production'),
+                false,
+                false,
+                'Lax'
+            );
         } catch (JWTException $e) {
             throw new \RuntimeException('Could not create token');
         }
 
         return [
           'token' => $token,
-          'expires_in' => JWTAuth::factory()->getTTL() * 60,
+          'user' => $user,
+          'client_cookie' => $client_cookie,
+          'server_cookie' => $server_cookie,
         ];
     }
 
@@ -60,6 +91,8 @@ readonly class AuthService
     {
         try {
             $token = $token ?? JWTAuth::getToken();
+            cookie()->forget('jwt');
+            cookie()->forget('is_authenticated');
 
             if ($token) {
                 JWTAuth::setToken($token)->invalidate();

@@ -89,10 +89,12 @@ class ProcessFoodImage implements ShouldQueue
         $base_folder = rtrim(pathinfo($src_path, PATHINFO_DIRNAME), '/') . '/' . ($this->food->mf_id ?? 'unknown') . '/';
         $random_slug = substr(md5(uniqid((string) $this->food->mf_id, true)), 0, 8);
 
+        $any_variant_saved = false;
+
         foreach ($sizes as $size) {
             $img = $this->manager->read($content);
             /** @var \Intervention\Image\Image $img */
-            $img->resize($size, $size);
+            $img->cover($size, $size);
 
             // JPEG
             try {
@@ -101,6 +103,7 @@ class ProcessFoodImage implements ShouldQueue
                 $path_jpg = $base_folder . $filename_jpg;
                 $disk_instance->put($path_jpg, $encoded_jpg, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('jpg')]);
                 $variants['jpeg'][(string)$size] = $path_jpg;
+                $any_variant_saved = true;
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: jpeg failed', ['size' => $size,'err' => $e->getMessage()]);
             }
@@ -113,6 +116,7 @@ class ProcessFoodImage implements ShouldQueue
                 $path_webp = $base_folder . $filename_webp;
                 $disk_instance->put($path_webp, $encoded_webp, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('webp')]);
                 $variants['webp'][(string)$size] = $path_webp;
+                $any_variant_saved = true;
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: webp failed', ['size' => $size,'err' => $e->getMessage()]);
             }
@@ -125,6 +129,7 @@ class ProcessFoodImage implements ShouldQueue
                 $path_avif = $base_folder . $filename_avif;
                 $disk_instance->put($path_avif, $encoded_avif, ['visibility' => 'public', 'ContentType' => $this->mimeForExt('avif')]);
                 $variants['avif'][(string)$size] = $path_avif;
+                $any_variant_saved = true;
             } catch (Exception $e) {
                 Log::error('ProcessFoodImage: avif failed', ['size' => $size,'err' => $e->getMessage()]);
             }
@@ -151,7 +156,11 @@ class ProcessFoodImage implements ShouldQueue
         }
 
         try {
-            $disk_instance->delete($src_path);
+            if ($any_variant_saved) {
+                $disk_instance->delete($src_path);
+            } else {
+                Log::warning('ProcessFoodImage: no variants created, keeping original', ['path' => $src_path, 'food' => $this->food->mf_id]);
+            }
         } catch (Exception $e) {
         }
     }
