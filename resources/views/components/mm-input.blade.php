@@ -4,6 +4,7 @@
     $error_name = $error_name ?? null;
     $placeholder = $placeholder ?? null;
     $label = $label ?? "";
+    $root_classes = $rootClasses ?? "";
     $type = $type ?? "text";
     $value = $value ?? old($name);
     $required = $required ?? false;
@@ -19,7 +20,7 @@
     }
 @endphp
 
-<div class="{{ $rootClasses }}">
+<div class="{{ $root_classes }}">
     <label
         for="{{ $name }}"
         class="flex items-center text-sm font-medium text-mm-light-gray mb-1"
