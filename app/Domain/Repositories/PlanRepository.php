@@ -31,7 +31,7 @@ class PlanRepository implements PlanRepositoryInterface
 
         $plan->activities()->sync($activity_ids);
 
-        $plan->mp_code = $this->codes->generateCode($plan->mp_id);
+        $plan->mp_code = $this->codes->generateCode();
         $plan->save();
 
         return $plan->load('activities');

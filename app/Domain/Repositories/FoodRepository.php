@@ -45,7 +45,7 @@ class FoodRepository implements FoodRepositoryInterface
     {
         $food = Food::create($data);
 
-        $food->mf_code = $this->codes->generateCode($food->mf_id);
+        $food->mf_code = $this->codes->generateCode();
         $food->save();
 
         $this->clearCache();

@@ -46,7 +46,7 @@ class ActivityRepository implements ActivityRepositoryInterface
 
         $activity->plans()->sync($plans_ids);
 
-        $activity->ma_code = $this->codes->generateCode($activity->ma_id);
+        $activity->ma_code = $this->codes->generateCode();
         $activity->save();
 
         $this->clearCache();

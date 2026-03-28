@@ -71,7 +71,7 @@ class MealRepository implements MealRepositoryInterface
         unset($data['foods']);
 
         $meal = Meal::create($data);
-        $meal->mm_code = $this->codes->generateCode($meal->mm_id);
+        $meal->mm_code = $this->codes->generateCode();
         $meal->save();
 
         if (!empty($items)) {

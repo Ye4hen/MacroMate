@@ -38,7 +38,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = User::create($data);
 
-        $user->mu_code = $this->codes->generateCode($user->mu_id);
+        $user->mu_code = $this->codes->generateCode();
         $user->save();
 
         return $user->load(['plan', 'role']);
