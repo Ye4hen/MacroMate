@@ -3,6 +3,11 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#f97316" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="MacroMate" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <title>@yield("title") — MacroMate</title>
         @stack("styles")
         @vite(["resources/css/app.css", "resources/js/app.js"])
@@ -63,5 +68,10 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
         @stack("scripts")
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js');
+            }
+        </script>
     </body>
 </html>
