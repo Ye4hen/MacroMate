@@ -72,13 +72,13 @@ class AdminFoodController extends AdminController
           'mf_type' => $validated['type'],
           'mf_image_url' => $image_path,
           'mf_image_disk' => $image_disk,
-          'mf_cals' => $validated['cals'] ?? null,
+          'mf_cals' => $validated['cals'] ?? 0,
           'mf_pfcfw' => [
             'proteins' => (float)($validated['proteins'] ?? 0),
             'fat' => (float)($validated['fat'] ?? 0),
             'carbs' => (float)($validated['carbs'] ?? 0),
             'fiber' => (float)($validated['fiber'] ?? 0),
-            'water' => (float)($validated['water'] ?? 0),
+            'water' => (float)($validated['water'] ?? ($validated['type'] === 'drink' ? 100 : 0)),
           ],
           'mf_created_by' => $request->user()->mu_code ?? null,
         ];
@@ -104,13 +104,13 @@ class AdminFoodController extends AdminController
         $payload = [
           'mf_name' => $validated['name'],
           'mf_type' => $validated['type'],
-          'mf_cals' => $validated['cals'] ?? null,
+          'mf_cals' => $validated['cals'] ?? 0,
           'mf_pfcfw' => [
             'proteins' => (float)($validated['proteins'] ?? 0),
             'fat' => (float)($validated['fat'] ?? 0),
             'carbs' => (float)($validated['carbs'] ?? 0),
             'fiber' => (float)($validated['fiber'] ?? 0),
-            'water' => (float)($validated['water'] ?? 0),
+            'water' => (float)($validated['water'] ?? ($validated['type'] === 'drink' ? 100 : 0)),
           ],
           'mf_updated_by' => $request->user()->mu_code ?? null,
         ];
@@ -158,25 +158,24 @@ class AdminFoodController extends AdminController
         // making image not required until cdn problem will be resolved
         $image_rules = ['sometimes', 'file', 'image', 'mimes:jpeg,png,jpg,gif,webp,avif', 'max:5120'];
 
+        $is_food = fn () => (string)$request->input('type') === 'food';
+
+        $food_only = [Rule::requiredIf($is_food), 'nullable', 'numeric', 'min:0'];
+
         $name_rules = $food
-          ? ['required', 'string', 'max:255', Rule::unique('mm_foods', 'mf_name')->whereNull('mf_deleted_at')->ignore($food->mf_code, 'mf_code')]
-          : ['required', 'string', 'max:255', Rule::unique('mm_foods', 'mf_name')->whereNull('mf_deleted_at')];
+            ? ['required', 'string', 'max:255', Rule::unique('mm_foods', 'mf_name')->whereNull('mf_deleted_at')->ignore($food->mf_code, 'mf_code')]
+            : ['required', 'string', 'max:255', Rule::unique('mm_foods', 'mf_name')->whereNull('mf_deleted_at')];
 
         $rules = [
-          'name' => $name_rules,
-          'type' => ['required', Rule::in(['food', 'drink'])],
-          'image' => $image_rules,
-          'cals' => ['required', 'integer', 'min:0'],
-          'proteins' => ['required', 'numeric', 'min:0'],
-          'fat' => ['required', 'numeric', 'min:0'],
-          'carbs' => ['required', 'numeric', 'min:0'],
-          'fiber' => ['required', 'numeric', 'min:0'],
-          'water' => [
-            Rule::requiredIf(fn () => (string)$request->input('type') === 'drink'),
-            'nullable',
-            'numeric',
-            'min:0',
-          ],
+            'name' => $name_rules,
+            'type' => ['required', Rule::in(['food', 'drink'])],
+            'image' => $image_rules,
+            'cals' => [Rule::requiredIf($is_food), 'nullable', 'integer', 'min:0'],
+            'proteins' => $food_only,
+            'fat' => $food_only,
+            'carbs' => $food_only,
+            'fiber' => $food_only,
+            'water' => ['nullable', 'numeric', 'min:0'],
         ];
 
         return $request->validate($rules);
