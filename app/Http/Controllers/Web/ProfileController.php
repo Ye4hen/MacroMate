@@ -159,8 +159,6 @@ class ProfileController extends Controller
 
         $user->update($request->validated());
 
-        Log::debug($request->all());
-
         if ($request->has('mu_plan_code')) {
             $this->updatePlan($user);
         }
