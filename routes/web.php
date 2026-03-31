@@ -31,7 +31,7 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 // Health check endpoint for uptime monitoring (e.g. UptimeRobot)
-Route::get('/health', fn() => response()->json(['status' => 'ok']));
+Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
 Route::middleware('jwt')->group(function () {
     Route::controller(ProfileController::class)->group(function () {
