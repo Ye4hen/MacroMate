@@ -28,7 +28,8 @@ class DashboardController extends Controller
     public function index(Request $request): View|Application
     {
         $date_param = $request->query('date');
-        $date = $date_param ? Carbon::parse($date_param) : now();
+        $timezone = $request->user()->timezone ?? 'Europe/Warsaw';
+        $date = $date_param ? Carbon::parse($date_param, $timezone) : now($timezone);
 
         $todays_macros = $this->calculateTodaysMacros($request, $date);
         $meals = $this->getMeals($request, $date);
@@ -37,7 +38,7 @@ class DashboardController extends Controller
         $activities = $this->activities_repository->getCachedActivities();
         $user_activities = $this->getCachedUserActivitiesForDate($request, $date->toDateString());
 
-        $time_ref = $date->isToday() ? Carbon::now() : Carbon::parse($date->toDateString() . ' ' . Carbon::now()->format('H:i'));
+        $time_ref = $date->isToday() ? Carbon::now($timezone) : Carbon::parse($date->toDateString() . ' ' . Carbon::now()->format('H:i'));
         [$add_meal_type, $add_meal_code] = $this->computeAddMealTypeAndCode($meals, $time_ref);
 
         return view('dashboard.index', compact('todays_macros', 'date', 'meals', 'has_meals', 'add_meal_code', 'add_meal_type', 'foods', 'activities', 'user_activities'));
