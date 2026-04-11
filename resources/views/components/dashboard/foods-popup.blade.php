@@ -12,7 +12,7 @@
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-101 w-full h-modal"
 >
-    <div class="relative p-4 w-full max-w-4xl h-full md:h-auto mx-auto">
+    <div class="relative p-4 w-full max-w-4xl m-auto">
         <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
             <button
                 type="button"
@@ -92,7 +92,7 @@
                     />
                 </form>
 
-                <div id="food-popup-grid" class="mt-4">
+                <div id="food-popup-grid" class="mt-4 h-[55vh] md:h-[65vh]">
                     @include("components.dashboard.food-grid", ["available_foods" => $available_foods])
                 </div>
             </div>

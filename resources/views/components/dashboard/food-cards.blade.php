@@ -38,7 +38,7 @@
         --}}
 
         <div class="flex-1 min-w-0">
-            <div class="flex items-start justify-end gap-2 flex-wrap">
+            <div class="flex flex-col items-end justify-end gap-2 flex-wrap">
                 <div class="text-right">
                     <div
                         class="font-medium text-slate-800 dark:text-slate-100 break-word"
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="text-right ml-auto">
+                <div class="text-right">
                     <div class="flex items-center gap-2">
                         <x-mm-input
                             type="number"
