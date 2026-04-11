@@ -72,6 +72,21 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js');
             }
+
+            // Refresh CSRF token every 15 minutes
+            setInterval(
+                async () => {
+                    const res = await fetch('/csrf-token');
+                    const data = await res.json();
+                    document
+                        .querySelector('meta[name="csrf-token"]')
+                        ?.setAttribute('content', data.token);
+                    document
+                        .querySelectorAll('input[name="_token"]')
+                        .forEach((el) => (el.value = data.token));
+                },
+                15 * 60 * 1000,
+            );
         </script>
     </body>
 </html>

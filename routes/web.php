@@ -111,3 +111,5 @@ Route::middleware('jwt')->group(function () {
 Route::get('/debug/logs', function () {
     return nl2br(file_get_contents(storage_path('logs/laravel.log')));
 });
+
+Route::get('/csrf-token', fn () => response()->json(['token' => csrf_token()]));
