@@ -33,6 +33,11 @@ class UserActivitiesController extends Controller
               'mua_time' => $data['time_spent'],
               'mua_calories_burned' => $calories_burned,
             ]);
+        } else {
+            $existing_activity->update([
+              'mua_time' => $existing_activity->mua_time + $data['time_spent'],
+              'mua_calories_burned' => $existing_activity->mua_calories_burned + $calories_burned,
+            ]);
         }
 
         Cache::tags(['stats', "user:{$user->mu_code}"])->flush();
