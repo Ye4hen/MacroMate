@@ -4,7 +4,7 @@
     id="edit-activity-modal"
     tabindex="-1"
     aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 w-full h-modal"
+    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-101 w-full h-modal"
 >
     <div class="relative p-4 w-full max-w-lg h-full md:h-auto mx-auto">
         <div class="relative bg-white rounded-lg shadow dark:bg-slate-800">
