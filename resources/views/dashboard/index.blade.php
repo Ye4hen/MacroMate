@@ -223,8 +223,9 @@
                     const remove_input_food_code = document.getElementById(
                         'remove-food-food-code',
                     );
-                    const img_container =
-                        document.getElementById('edit-food-thumb');
+                    // temporary commenting until the cdn problem will be resolved
+                    // const img_container =
+                    //     document.getElementById('edit-food-thumb');
                     const name_el = document.getElementById('edit-food-name');
                     const cals_el = document.getElementById('edit-food-cals');
 
@@ -247,11 +248,11 @@
                                     : '';
 
                                 // Thumbnail
-                                if (food_image) {
-                                    img_container.innerHTML = `<img src="${encodeURI(food_image)}" alt="${escapeHtml(food_name)}" class="w-16 h-16 rounded object-cover">`;
-                                } else {
-                                    img_container.innerHTML = `<div class="w-16 h-16 rounded bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-sm text-slate-500">N/A</div>`;
-                                }
+                                // if (food_image) {
+                                //     img_container.innerHTML = `<img src="${encodeURI(food_image)}" alt="${escapeHtml(food_name)}" class="w-16 h-16 rounded object-cover">`;
+                                // } else {
+                                //     img_container.innerHTML = `<div class="w-16 h-16 rounded bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-sm text-slate-500">N/A</div>`;
+                                // }
 
                                 // Set inputs
                                 input_meal_code.value = meal_code || '';
