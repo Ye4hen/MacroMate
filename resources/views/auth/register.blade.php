@@ -42,13 +42,14 @@
                     Already have an account?
                 </a>
             </div>
-            <div class="mt-4 text-center">
+            {{-- temporary commenting until the google auth problem will be resolved --}}
+            {{-- <div class="mt-4 text-center">
                 <x-social-button
                     label="Register with Google"
                     href="{{ route('auth.google.redirect') }}"
                     class="bg-mm-dark-blue text-white hover:bg-mm-border transition"
                 />
-            </div>
+            </div> --}}
         </form>
     </div>
 @endsection
