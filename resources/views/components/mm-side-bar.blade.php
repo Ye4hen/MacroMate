@@ -208,7 +208,21 @@
     const title_mobile = document.getElementById('sidebar-title-mobile');
     const toggle_icon = document.getElementById('toggle-icon');
 
-    toggle_btn.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
+        const is_mobile = window.innerWidth < 1024;
+        const sidebar_is_open = sidebar.classList.contains('!w-64');
+
+        if (sidebar_is_open && is_mobile && !sidebar.contains(e.target)) {
+            toggleSidebar();
+        }
+    });
+
+    toggle_btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleSidebar();
+    });
+
+    function toggleSidebar() {
         const is_mobile = window.innerWidth < 1024;
         if (is_mobile) {
             sidebar.classList.toggle('!w-64');
@@ -225,5 +239,5 @@
             title_mobile.classList.toggle('!block');
         }
         toggle_icon.classList.toggle('rotate-180');
-    });
+    }
 </script>
