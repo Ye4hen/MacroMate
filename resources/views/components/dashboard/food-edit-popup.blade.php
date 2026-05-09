@@ -29,13 +29,16 @@
                 </p>
                 <div class="mt-4">
                     <div class="flex items-start gap-4">
-                        <div id="edit-food-thumb" class="flex-shrink-0">
+                        {{-- temporary commenting until the cdn problem will be resolved --}}
+                        {{--
+                            <div id="edit-food-thumb" class="flex-shrink-0">
                             <div
-                                class="w-16 h-16 rounded bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-sm text-slate-500"
+                            class="w-16 h-16 rounded bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-sm text-slate-500"
                             >
-                                N/A
+                            N/A
                             </div>
-                        </div>
+                            </div>
+                        --}}
                         <div class="flex-1">
                             <div
                                 id="edit-food-name"

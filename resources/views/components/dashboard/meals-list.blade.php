@@ -105,31 +105,51 @@
                                         @endphp
 
                                         <li
-                                            class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white dark:bg-slate-800 border rounded px-3 py-2"
+                                            class="grid gap-3 sm:gap-4 bg-white dark:bg-slate-800 border rounded px-3 py-2"
                                         >
-                                            <div
-                                                class="flex items-center gap-3"
-                                            >
-                                                <div class="text-sm">
-                                                    <h4
-                                                        class="font-medium text-slate-800 dark:text-slate-100"
-                                                    >
-                                                        {{ $name }}
-                                                    </h4>
-                                                    <div
-                                                        class="text-xs text-slate-500 dark:text-slate-400"
-                                                    >
-                                                        {{ $qty . ($unit ? " " . $unit : "") }}
-                                                    </div>
-                                                </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                              <div class="flex items-start gap-3">
+                                                  <div class="text-sm">
+                                                      <h4
+                                                          class="font-medium text-slate-800 dark:text-slate-100"
+                                                      >
+                                                          {{ $name }}
+                                                      </h4>
+                                                      <div
+                                                          class="text-xs text-slate-500 dark:text-slate-400"
+                                                      >
+                                                          {{ $qty . ($unit ? " " . $unit : "") }}
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div
+                                                  class="text-sm leading-none font-medium text-slate-800 dark:text-slate-100"
+                                              >
+                                                  {{ ((float) $food->mf_cals * (float) $qty) / 100 }}
+                                                  kcal
+                                              </div>
                                             </div>
                                             <div
-                                                class="text-xs text-slate-500 dark:text-slate-400"
+                                                class="flex items-center gap-1 flex-wrap"
                                             >
-                                                @if (isset($food->mf_cals))
-                                                    {{ (float) $food->mf_cals }}
-                                                    kcal/100g
-                                                @endif
+                                                <span
+                                                    class="text-xs px-2 py-0.5 rounded-full bg-mm-gray/30 text-mm-light-gray"
+                                                >
+                                                    {{ round(((float) $food->mf_pfcfw["proteins"] * (float) $qty) / 100, 1) }}g
+                                                    P
+                                                </span>
+                                                <span
+                                                    class="text-xs px-2 py-0.5 rounded-full bg-mm-gray/30 text-mm-light-gray"
+                                                >
+                                                    {{ round(((float) $food->mf_pfcfw["fat"] * (float) $qty) / 100, 1) }}g
+                                                    F
+                                                </span>
+                                                <span
+                                                    class="text-xs px-2 py-0.5 rounded-full bg-mm-gray/30 text-mm-light-gray"
+                                                >
+                                                    {{ round(((float) $food->mf_pfcfw["carbs"] * (float) $qty) / 100, 1) }}g
+                                                    C
+                                                </span>
                                             </div>
                                             <div
                                                 class="flex items-center gap-2"
